@@ -9,11 +9,12 @@ class Aeroplane:
     __on_ground: bool  # состояние самолета(воздух/земля)
 
     def __init__(self, icao24, callsign, origin_country, speed, altitude, on_ground=False):
-        self.__icao24 = icao24
-        self.__callsign = callsign
-        self.__origin_country = origin_country
-        self.__speed = speed
-        self.__on_ground = on_ground
+        self.icao24 = icao24
+        self.callsign = callsign
+        self.origin_country = origin_country
+        self.speed = speed
+        self.altitude = altitude
+        self.on_ground = on_ground
 
     def __str__(self) -> str:
         return (
@@ -26,7 +27,7 @@ class Aeroplane:
         """Проверяет, что value число"""
         if value is None:
             return 0.0
-        if not isinstance(value, (int, float)):
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
             raise TypeError(f"{name} должно быть числом")
         return float(value)
 
@@ -43,12 +44,12 @@ class Aeroplane:
         if not isinstance(other, Aeroplane):
             raise TypeError("Сравнивать можно толтко с другим Aeroplane")
 
-    def compare_speed(self, other) -> int:
+    def compare_speed(self, other) -> bool:
         """True, если этот самолёт летит быстрее другого"""
         self.check_other(other)
         return self.speed > other.speed
 
-    def compare_height(self, other):
+    def compare_height(self, other) -> bool:
         """True, если этот самолёт летит выше другого"""
         self.check_other(other)
         return self.altitude > other.altitude
@@ -97,7 +98,7 @@ class Aeroplane:
 
     @altitude.setter
     def altitude(self, value: float | None):
-        self.check_number(value, "altitude")
+        self.__altitude = self.check_number(value, "altitude")
 
     @property
     def on_ground(self):
@@ -108,3 +109,28 @@ class Aeroplane:
         if not isinstance(value, bool):
             raise TypeError("on_ground должно быть True или False")
         self.__on_ground = value
+
+    @classmethod
+    def plane_from_opensky(cls, state: list):
+        """Создает самолет из одного списка значений opensky"""
+        if len(state) < 10:
+            raise ValueError("Слишком короткая запись")
+        return cls(
+            icao24=state[0],
+            callsign=state[1],
+            origin_country=state[2],
+            speed=state[9],
+            altitude=state[7],
+            on_ground=state[8],
+        )
+
+    def to_dict(self) -> dict:
+        """Словарь для сохранения в JSON"""
+        return {
+            "icao24": self.icao24,
+            "callsign": self.callsign,
+            "origin_country": self.origin_country,
+            "speed": self.speed,
+            "altitude": self.altitude,
+            "on_ground": self.on_ground,
+        }
