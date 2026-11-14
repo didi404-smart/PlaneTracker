@@ -134,3 +134,15 @@ class Aeroplane:
             "altitude": self.altitude,
             "on_ground": self.on_ground,
         }
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        """Создает самолет из словаря"""
+        return cls(
+            icao24=data["icao24"],
+            callsign=data["callsign"],
+            origin_country=data["origin_country"],
+            speed=data["speed"],
+            altitude=data["altitude"],
+            on_ground=data["on_ground"]
+        )
