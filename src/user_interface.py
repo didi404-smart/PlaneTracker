@@ -53,3 +53,36 @@ def load_planes(adapter: APIAdapter, storage: BaseStorage) -> list[Aeroplane] | 
     storage.add_aeroplanes(planes)
     print(f"найдено самолётов: {len(planes)}. Успешно сохранены в файл.")
     return planes
+
+MENU = (
+    '\n1. Запросить самолёты над страной\n'
+    '2. Топ N самолётов по высоте\n'
+    '3. Самолёты по стране регистрации\n'
+    '0. Выход\n'
+)
+
+def menu(adapter: APIAdapter, storage: BaseStorage) -> None:
+    """Главное меню"""
+    planes = []
+    print(MENU)
+    while True:
+        choice = input("Введите номер выбранного пункта: ").strip()
+
+        if choice == "1":
+            res = load_planes(adapter, storage)
+            if res is not None:
+                planes = res
+        elif choice in ("2", "3"):
+            if not planes:
+                print("Сначала запросить самолёты над страной (пункт 1)")
+            elif choice == "2":
+                n = ask_number("Сколько самолётов показать? Введите число: ")
+                print_aeroplanes(get_top_altitude(planes, n))
+            else:
+                country = input("Введите страну регистации: ")
+                print_aeroplanes(filter_country(planes, country))
+        elif choice == "0":
+            print("До свидания!")
+            break
+        else:
+            print("Такого пункта нет. Пожалуйтса, выберите 1, 2, 3 или 0")
