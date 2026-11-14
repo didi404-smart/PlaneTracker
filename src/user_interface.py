@@ -83,7 +83,7 @@ def menu(adapter: APIAdapter, storage: BaseStorage) -> None:
                 planes = res
         elif choice in ("2", "3"):
             if not planes:
-                print("Сначала запросить самолёты над страной (пункт 1)")
+                print("Сначала запросите самолёты над страной (пункт 1)")
             elif choice == "2":
                 n = ask_number("Сколько самолётов показать? Введите число: ")
                 print_aeroplanes(get_top_altitude(planes, n))

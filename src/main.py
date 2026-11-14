@@ -6,7 +6,7 @@ from src.user_interface import menu
 def main() -> None:
     """Собирает компоненты и запускает программу."""
     adapter = APIAdapter()
-    storage = JSONStorage('data/aeroplanes.json')
+    storage = JSONStorage("data/aeroplanes.json")
     storage.connect()
     try:
         menu(adapter, storage)
@@ -14,5 +14,5 @@ def main() -> None:
         storage.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
