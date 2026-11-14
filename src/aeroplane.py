@@ -144,5 +144,5 @@ class Aeroplane:
             origin_country=data["origin_country"],
             speed=data["speed"],
             altitude=data["altitude"],
-            on_ground=data["on_ground"]
+            on_ground=data["on_ground"],
         )
